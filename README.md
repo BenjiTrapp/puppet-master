@@ -1,7 +1,13 @@
 
 <p align="center">
-<img src="/docs/puppet-master.png">
+<img width=400 src="/docs/puppet-master.png">
 </p>
+
+##### Disclamer:
+> I'm not responsible for any harm caused by this tool. The provided docker image is part of my curiosity and used for CTFs and education only. Use these powers wisely and stay on the light side!
+
+
+## Tighten the strings and have some fun with your puppets
 
 This Docker image is build on top of a minimal base install of the latest version of the Kali Linux Rolling Distribution and enriched with additional capabilities to transform it into a [C2 Server](https://www.paloaltonetworks.com/cyberpedia/command-and-control-explained) to aid during Pentesting engagements, CTFs or for other sakes.
 
