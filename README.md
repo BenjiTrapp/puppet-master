@@ -45,3 +45,22 @@ A prompt will ask password either in the browser or vnc viewer.
 P.S. If you are going to run container in cloud virtual machine, first run the bellow command to virtual machine in cloud to create ssh tunnel to your virtual machine
 
 `ssh -i .ssh/private_key -L 6080:localhost:6080 -L 5900:localhost:5900 user@IP`
+
+## Content 
+
+**Kali metapackages [https://tools.kali.org/kali-metapackages]**:
+* kali-tools-top10
+* kali-desktop-gnome
+* kali-tools-fuzzing
+* kali-tools-passwords
+* kali-tools-post-exploitation
+* kali-tools-sniffing-spoofing
+
+**C2 Capabilities**:
+* Metasploit
+* Covenant
+* SilentTrinity
+* Empire
+* StarKiller
+* PoshC2
+* Merlin
