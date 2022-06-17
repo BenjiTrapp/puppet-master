@@ -54,7 +54,9 @@ P.S. If you are going to run container in cloud virtual machine, first run the b
 * kali-tools-fuzzing
 * kali-tools-passwords
 * kali-tools-post-exploitation
+* kali-tools-information-gathering
 * kali-tools-sniffing-spoofing
+* kali-tools-social-engineering
 
 **C2 Capabilities**:
 * Metasploit
