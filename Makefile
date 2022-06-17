@@ -1,4 +1,3 @@
-
 all: build run
 
 build:
@@ -6,4 +5,4 @@ build:
 			docker build -t puppet-master .
 
 run:
-			docker run -it -d --rm --name puppet-master -p 6080:8080 puppet-master
+			docker run -it -d --rm --name puppet-master -p 6080:80 puppet-master

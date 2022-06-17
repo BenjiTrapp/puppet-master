@@ -22,7 +22,6 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         mesa-utils libgl1-mesa-dri \
         dbus-x11 x11-utils \
         git \
-        openssh-server \
         cewl \
         crunch \ 
         hydra \
@@ -63,7 +62,7 @@ ADD containerfiles /
 RUN pip3 install setuptools wheel && pip install -r /usr/lib/web/requirements.txt \
     bash install-c2-server.sh
 
-EXPOSE 8080
+EXPOSE 80
 WORKDIR /root
 ENV HOME=/root \
     SHELL=/bin/bash
