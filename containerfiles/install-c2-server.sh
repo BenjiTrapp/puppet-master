@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function get_latest_release() {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" |
+    grep '"tag_name":' |                                            
+    sed -E 's/.*"([^"]+)".*/\1/'                                    
+}
+
 #Install Enum4Linux"
 cd /opt
 git clone https://github.com/CiscoCXSecurity/enum4linux.git
@@ -23,8 +29,10 @@ git clone https://github.com/BC-SECURITY/Empire.git
 cd Empire
 ./setup/install.sh
 cd /opt
-wget https://github.com/BC-SECURITY/Starkiller/releases/download/v1.8.0/starkiller-1.8.0.AppImage
-chmod +x starkiller-1.0.0.AppImage
+
+STARKILLER_VERSION=$(get_latest_release "BC-SECURITY/Starkiller")
+wget https://github.com/BC-SECURITY/Starkiller/releases/download/"${STARKILLER_VERSION}"/starkiller-"${STARKILLER_VERSION:1}".AppImage
+chmod +x starkiller-"${STARKILLER_VERSION:1}".AppImage
 
 #Install PoshC2
 cd /opt
