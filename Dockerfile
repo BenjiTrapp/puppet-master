@@ -26,7 +26,6 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         cewl \
         crunch \ 
         hydra \
-        sqlmap \
         ncrack \
         gobuster \
         dirb \
@@ -51,7 +50,9 @@ RUN apt-get update && apt-cache search kali-linux && apt-get install -y   \
         kali-tools-fuzzing \
         kali-tools-passwords \
         kali-tools-post-exploitation \
-        kali-tools-sniffing-spoofing
+        kali-tools-information-gathering \
+        kali-tools-sniffing-spoofing \
+        kali-tools-social-engineering
 
 
 ENV TINI_VERSION v0.19.0
