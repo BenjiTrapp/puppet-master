@@ -1,42 +1,27 @@
 #!/bin/bash
 
-#Install System Sofware Essentials
-apt install python3.9 python3-pip git openssh-server open-vm-tools -y
-apt --fix-broken install -y
-
-#Install Hacking Packages
-apt-get install cewl crunch hydra sqlmap ncrack gobuster dirb wfuzz medusa nmap netcat hashcat -y
-
 #Install Enum4Linux"
 cd /opt
 git clone https://github.com/CiscoCXSecurity/enum4linux.git
 echo "alias enum4linux='/opt/enum4linux/./enum4linux.pl'" >> /root/.bashrc
-
-apt --fix-broken install -y
-
-#Install Cherrytree For Documentation
-sudo apt-get install cherrytree -y
-apt --fix-broken install -y
 
 #Install PwnCat
 cd /opt
 git clone https://github.com/calebstewart/pwncat.git
 cd pwncat 
 python3 setup.py install
-apt --fix-broken install -y
 
 #Install Worldists & Rule Sets
 cd /opt
 git clone https://github.com/NotSoSecure/password_cracking_rules.git
 git clone https://github.com/praetorian-inc/Hob0Rules.git
 git clone https://github.com/danielmiessler/SecLists.git
-apt --fix-broken install -y
 
 #Install Social Engineering Toolkit
 git clone https://github.com/trustedsec/social-engineer-toolkit.git
 cd social-engineer-toolkit/
 python3 setup.py
-apt --fix-broken install -y
+
 
 Random1="9474660489"
 Random2="4056882604"
@@ -44,7 +29,7 @@ Random3="1151928065"
 
 custom1=$(echo $custom1 | md5sum | head -c 20)
 
-sudo git clone --recurse-submodules https://github.com/ZeroPointSecurity/Covenant.git /opt/Covenant
+git clone --recurse-submodules https://github.com/ZeroPointSecurity/Covenant.git /opt/Covenant
 
 cd /opt/Covenant/Covenant/
 
@@ -193,43 +178,37 @@ mv ../EmbeddedResources/ ./Data/
 dotnet build
 #Install Powershell Empire & Starkiller GUI
 cd /opt
-apt update -y && apt upgrade -y 
-apt --fix-broken install -y 
-cd /opt
-sudo git clone https://github.com/BC-SECURITY/Empire.git
+git clone https://github.com/BC-SECURITY/Empire.git
 cd Empire
-sudo ./setup/install.sh
+./setup/install.sh
 cd /opt
-sudo wget https://github.com/BC-SECURITY/Starkiller/releases/download/v1.8.0/starkiller-1.8.0.AppImage
-sudo chmod +x starkiller-1.0.0.AppImage
-apt --fix-broken install -y
+wget https://github.com/BC-SECURITY/Starkiller/releases/download/v1.8.0/starkiller-1.8.0.AppImage
+chmod +x starkiller-1.0.0.AppImage
+
 
 #Install PoshC2
 cd /opt
 curl -sSL https://raw.githubusercontent.com/nettitude/PoshC2/master/Install.sh | bash
-apt install golang -y
-apt --fix-broken install -y
+
 
 #Install Metasploit
 cd /opt
-apt install postgresql -y
 systemctl start postgresql 
 systemctl enable postgresql
-apt install curl -y
-apt --fix-broken install -y
+
 curl https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb > msfinstall
 
 chmod +x msfinstall
 ./msfinstall
-apt --fix-broken install -y
+
 
 #Install Impacket
 cd /opt 
 git clone https://github.com/SecureAuthCorp/impacket.git
 /opt/impacket
-sudo pip3 install -r /opt/impacket/requirements.txt
-sudo python3 ./setup.py install
-apt --fix-broken install -y
+pip3 install -r /opt/impacket/requirements.txt
+python3 ./setup.py install
+
 
 #Installing Responder
 https://github.com/lgandx/Responder.git
