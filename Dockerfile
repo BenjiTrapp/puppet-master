@@ -1,10 +1,8 @@
 FROM kalilinux/kali-rolling
 
-# GOD MODE YAY
-USER root
-RUN echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" > /etc/apt/sources.list && \
-echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /etc/apt/sources.list
-RUN sed -i 's#http://archive.ubuntu.com/#http://tw.archive.ubuntu.com/#' /etc/apt/sources.list
+RUN echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" > /etc/apt/sources.list  \
+    && echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /etc/apt/sources.list \
+    && sed -i 's#http://archive.ubuntu.com/#http://tw.archive.ubuntu.com/#' /etc/apt/sources.list
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -28,15 +26,11 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         ncrack \
         gobuster \
         dirb \
-        wfuzz \
         medusa \
-        nmap \
-        netcat \
         hashcat \
         cherrytree \
         golang \
-        curl \
-        postgres \
+        postgresql \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
@@ -59,8 +53,9 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/
 RUN chmod +x /bin/tini
 
 ADD containerfiles /
-RUN pip3 install setuptools wheel && pip install -r /usr/lib/web/requirements.txt \
-    bash install-c2-server.sh
+RUN pip3 install setuptools wheel trufflehog \
+    && pip install -r /usr/lib/web/requirements.txt \
+    && bash install-c2-server.sh
 
 EXPOSE 80
 WORKDIR /root
