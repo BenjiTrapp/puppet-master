@@ -38,7 +38,7 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
     && pip3 install -U pip
 
 # For installing other Kali metapackages check https://tools.kali.org/kali-metapackages
-RUN apt-get update && apt-cache search kali-linux && apt-get install -y   \
+RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
         kali-tools-top10 \
         kali-desktop-gnome \
         kali-tools-fuzzing \
@@ -53,8 +53,8 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/
 RUN chmod +x /bin/tini
 
 ADD containerfiles /
-RUN pip3 install setuptools wheel trufflehog pwncat-cs \
-    && pip install -r /usr/lib/web/requirements.txt 
+RUN pip install setuptools wheel pwncat-cs && \
+    pip install -r /usr/lib/web/requirements.txt 
     
 RUN bash /opt/install-c2-server.sh
 
