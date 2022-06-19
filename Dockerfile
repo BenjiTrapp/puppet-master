@@ -54,8 +54,9 @@ RUN chmod +x /bin/tini
 
 ADD containerfiles /
 RUN pip3 install setuptools wheel trufflehog pwncat-cs \
-    && pip install -r /usr/lib/web/requirements.txt \
-    && bash install-c2-server.sh
+    && pip install -r /usr/lib/web/requirements.txt 
+    
+RUN bash /opt/install-c2-server.sh
 
 EXPOSE 80
 WORKDIR /root
