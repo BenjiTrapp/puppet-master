@@ -31,6 +31,7 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         cherrytree \
         golang \
         postgresql \
+        sqlite3 \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
@@ -45,15 +46,14 @@ RUN apt-get update && apt-cache search kali-linux && apt-get install -y   \
         kali-tools-post-exploitation \
         kali-tools-information-gathering \
         kali-tools-sniffing-spoofing \
-        kali-tools-social-engineering
-
+        kali-tools-social-engineering \
 
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
 RUN chmod +x /bin/tini
 
 ADD containerfiles /
-RUN pip3 install setuptools wheel trufflehog \
+RUN pip3 install setuptools wheel trufflehog pwncat-cs \
     && pip install -r /usr/lib/web/requirements.txt \
     && bash install-c2-server.sh
 
