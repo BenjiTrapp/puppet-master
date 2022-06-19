@@ -46,7 +46,7 @@ RUN apt-get update && apt-cache search kali-linux && apt-get install -y   \
         kali-tools-post-exploitation \
         kali-tools-information-gathering \
         kali-tools-sniffing-spoofing \
-        kali-tools-social-engineering \
+        kali-tools-social-engineering
 
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
