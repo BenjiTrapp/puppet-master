@@ -1,3 +1,4 @@
+[![Docker](https://github.com/BenjiTrapp/puppet-master/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/BenjiTrapp/puppet-master/actions/workflows/docker-publish.yml)
 
 <p align="center">
 <img width=400 src="/docs/puppet-master.png">
@@ -11,6 +12,11 @@
 
 This Docker image is build on top of a minimal base install of the latest version of the Kali Linux Rolling Distribution and enriched with additional capabilities to transform it into a [C2 Server](https://www.paloaltonetworks.com/cyberpedia/command-and-control-explained) to aid during Pentesting engagements, CTFs or for other sakes.
 
+```bash
+docker pull ghcr.io/benjitrapp/puppet-master:main
+```
+
+#### Wanna build your own image?
 For a Kickstart use the Makefile: `make all` and watch the magic of the puppet master by browsing to [http://127.0.0.1:6080/](http://127.0.0.1:6080/)
 
 ## Not ready to get mesmerized yet?
