@@ -12,11 +12,14 @@
 
 This Docker image is build on top of a minimal base install of the latest version of the Kali Linux Rolling Distribution and enriched with additional capabilities to transform it into a [C2 Server](https://www.paloaltonetworks.com/cyberpedia/command-and-control-explained) to aid during Pentesting engagements, CTFs or for other sakes.
 
+#### Get a pre-build image
+
 ```bash
 docker pull ghcr.io/benjitrapp/puppet-master:main
 ```
 
 #### Wanna build your own image?
+
 For a Kickstart use the Makefile: `make all` and watch the magic of the puppet master by browsing to [http://127.0.0.1:6080/](http://127.0.0.1:6080/)
 
 ## Not ready to get mesmerized yet?
