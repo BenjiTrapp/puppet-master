@@ -53,8 +53,8 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/
 RUN chmod +x /bin/tini
 
 ADD containerfiles /
-RUN pip install pwncat-cs && \
-    pip install -r /usr/lib/web/requirements.txt 
+RUN piip install pwncat-cs && \
+    pip3 install -r /usr/lib/web/requirements.txt 
     
 RUN bash /opt/install-c2-server.sh
 
