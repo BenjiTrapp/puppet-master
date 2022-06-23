@@ -40,22 +40,24 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
 # For installing other Kali metapackages check https://tools.kali.org/kali-metapackages
 RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
         kali-tools-top10 \
-        kali-desktop-gnome \
         kali-tools-fuzzing \
         kali-tools-passwords \
         kali-tools-post-exploitation \
         kali-tools-information-gathering \
-        kali-tools-sniffing-spoofing \
-        kali-tools-social-engineering
+        kali-tools-sniffing-spoofing
 
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
-RUN chmod +x /bin/tini
+
 
 ADD containerfiles /
-RUN pip3 install -r /usr/lib/web/requirements.txt 
-    
-RUN bash /opt/install-c2-server.sh
+RUN pip3 install -r /usr/lib/web/requirements.txt \
+    pip3 install pwncat-cs
+
+RUN chmod +x /bin/tini && \
+    chmod +x /startup.sh && \
+    chmod +x /opt/install-c2-server.sh && \
+    bash /opt/install-c2-server.sh
 
 EXPOSE 80
 WORKDIR /root

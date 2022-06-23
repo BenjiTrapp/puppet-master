@@ -33,7 +33,7 @@ function install_wordlists_and_rule_sets() {
 	git clone https://github.com/danielmiessler/SecLists.git
 }
 
-function install_push_c2() {
+function install_posh_c2() {
 	cd /opt || return
 	curl -sSL https://raw.githubusercontent.com/nettitude/PoshC2/master/Install.sh | bash
 }
@@ -49,5 +49,6 @@ function install_ninja() {
 
 install_c2_server_over_apt
 install_wordlists_and_rule_sets
-install_push_c2
+install_posh_c2
 install_enum4linux
+install_baby_shark
