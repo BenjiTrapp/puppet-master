@@ -51,8 +51,7 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/
 
 
 ADD containerfiles /
-RUN pip3 install -r /usr/lib/web/requirements.txt \
-    pip3 install pwncat-cs
+RUN pip3 install -r /usr/lib/web/requirements.txt
 
 RUN chmod +x /bin/tini && \
     chmod +x /startup.sh && \
