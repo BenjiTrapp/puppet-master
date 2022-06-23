@@ -51,4 +51,4 @@ install_c2_server_over_apt
 install_wordlists_and_rule_sets
 install_posh_c2
 install_enum4linux
-install_baby_shark
+#install_baby_shark
