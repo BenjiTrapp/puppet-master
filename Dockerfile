@@ -40,11 +40,8 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
 # For installing other Kali metapackages check https://tools.kali.org/kali-metapackages
 RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
         kali-tools-top10 \
-        kali-tools-fuzzing \
         kali-tools-passwords \
-        kali-tools-post-exploitation \
-        kali-tools-information-gathering \
-        kali-tools-sniffing-spoofing
+        kali-tools-post-exploitation
 
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
@@ -57,6 +54,10 @@ RUN chmod +x /bin/tini && \
     chmod +x /startup.sh && \
     chmod +x /opt/install-c2-server.sh && \
     bash /opt/install-c2-server.sh
+
+RUN chmod -R u=rwx,go=rx /usr/lib/noVNC && \
+    chmod -R u=rwx,go=rx /usr/lib/web && \
+    chmod -R u=rwx,go=rx /usr/share/doro-lxde-wallpapers
 
 EXPOSE 80
 WORKDIR /root
