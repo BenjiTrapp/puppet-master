@@ -89,7 +89,6 @@ ADD containerfiles /
 # Install C2 Server next to the existing stuff
 RUN chmod +x /opt/install-c2-server.sh && \
     chmod +x /opt/entrypoint.sh && \
-    chmod +x /opt/bash.sh && \
     bash /opt/install-c2-server.sh
 
 ENTRYPOINT [ "/opt/entrypoint.sh" ]
