@@ -27,10 +27,10 @@ RUN apt-get -y update \
 
 RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         openssh-server pwgen sudo vim-tiny \
-	    supervisor \
+	supervisor \
         net-tools \
         binutils \
-	    xfonts-base lwm xterm \
+	xfonts-base lwm xterm \
         nginx \
         python3-pip python3-full python3-dev build-essential \
         golang-go \
