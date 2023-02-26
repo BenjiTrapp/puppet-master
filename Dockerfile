@@ -1,68 +1,95 @@
-FROM kalilinux/kali-rolling
+FROM kalilinux/kali-rolling:latest
 
-RUN echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" > /etc/apt/sources.list  \
-    && echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" >> /etc/apt/sources.list \
-    && sed -i 's#http://archive.ubuntu.com/#http://tw.archive.ubuntu.com/#' /etc/apt/sources.list
+LABEL org.opencontainers.image.author="benjitrapp.github.io"
 
+ARG KALI_METAPACKAGE=core
+ARG KALI_DESKTOP=xfce
+
+ENV VNCEXPOSE 1
+ENV VNCPORT 5900
+ENV VNCPWD password
+ENV VNCDISPLAY 1920x1080
+ENV VNCDEPTH 16
+ENV USER root
+
+ENV NOVNCPORT 8080
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get -y update && apt-get -y dist-upgrade && apt-get clean \
-    && apt-get install -y --no-install-recommends software-properties-common curl
+ENV GOROOT=/usr/lib/go
+ENV GO111MODULE=on
+ENV GOPATH=$HOME/go
+ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+RUN apt-get -y update \
+    && apt-get -y dist-upgrade \
+    && apt-get clean \
+    && apt-get install -y --no-install-recommends software-properties-common curl wget vim nano
 
 RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         openssh-server pwgen sudo vim-tiny \
 	    supervisor \
         net-tools \
-        lxde x11vnc xvfb autocutsel \
+        binutils \
 	    xfonts-base lwm xterm \
         nginx \
-        python3-pip python3-dev build-essential \
-        mesa-utils libgl1-mesa-dri \
-        dbus-x11 x11-utils \
+        python3-pip python3-full python3-dev build-essential \
+        golang-go \
         git \
+        jq \
+        powershell \
+        whois \
+        proxychains4 \
+        libproxychains4 \
+        sslscan \
+        traceroute \
         cewl \
         crunch \ 
+        fail2ban \
         hydra \
         ncrack \
         gobuster \
         dirb \
+        kerberoast \
+        bloodhound \
         medusa \
         hashcat \
         cherrytree \
         golang \
+        sliver \
         postgresql \
         sqlite3 \
+        tightvncserver \
+        dbus \
+        dbus-x11 \
+        novnc \
+        net-tools \
+        xfonts-base \
+    && cd /usr/local/bin \
+    && ln -s /usr/bin/python3 python \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip3 install -U pip
+    && rm -rf /var/lib/apt/lists/*
 
 # For installing other Kali metapackages check https://tools.kali.org/kali-metapackages
 RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
+        kali-linux-${KALI_METAPACKAGE} \
+        kali-desktop-${KALI_DESKTOP} \
+        kali-tools-web \
+        kali-tools-windows-resources \
+        kali-tools-top10 \
         kali-tools-top10 \
         kali-tools-passwords \
         kali-tools-post-exploitation
 
-ENV TINI_VERSION v0.19.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /bin/tini
-
+RUN pip3 install --break-system-package --no-cache-dir --upgrade pip  && \
+    pip3 install --break-system-package --no-cache-dir awscli boto3 pacu trufflehog endgame notebook
 
 ADD containerfiles /
-RUN pip3 install -r /usr/lib/web/requirements.txt
 
-RUN chmod +x /bin/tini && \
-    chmod +x /startup.sh && \
-    chmod +x /opt/install-c2-server.sh && \
+# Install C2 Server next to the existing stuff
+RUN chmod +x /opt/install-c2-server.sh && \
+    chmod +x /opt/entrypoint.sh && \
+    chmod +x /opt/bash.sh && \
     bash /opt/install-c2-server.sh
 
-RUN chmod -R u=rwx,go=rx /usr/lib/noVNC && \
-    chmod -R u=rwx,go=rx /usr/lib/web && \
-    chmod -R u=rwx,go=rx /usr/share/doro-lxde-wallpapers
-
-EXPOSE 80
-WORKDIR /root
-ENV HOME=/root \
-    SHELL=/bin/bash
-
-ENTRYPOINT ["/startup.sh"]
-CMD ["/bin/bash"]
+ENTRYPOINT [ "/opt/entrypoint.sh" ]

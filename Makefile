@@ -1,8 +1,24 @@
-all: build run
+# vim:ft=make:
+
+.PHONY : all start github
+
+all: github
 
 build:
-			docker pull kalilinux/kali-rolling
-			docker build -t puppet-master .
+		docker build -t puppet-master .
 
-run:
-			docker run -it -d --rm --name puppet-master -p 6080:80 puppet-master
+github:
+		docker pull ghcr.io/benjitrapp/puppet-master:nightly
+		docker run --rm -it -p 9020:8080 -p 9021:5900 ghcr.io/benjitrapp/puppet-master:nightly puppet-master
+
+clean:
+		docker rmi puppet-master
+
+start:
+		docker run --rm -it -p 9020:8080 -p 9021:5900 --name puppet-master puppet-master
+
+stop:
+		docker rm -f puppet-master
+
+browser:
+		browse 'http://localhost:9020/vnc.html' | sh -e
