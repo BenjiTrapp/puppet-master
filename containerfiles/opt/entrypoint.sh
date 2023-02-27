@@ -18,6 +18,13 @@ function source_bash() {
   source /opt/bash.sh
 }
 
+function tor_and_proxychains() {
+  service tor start
+
+  echo "You can run now proxychains nmap -targetaddress"
+  echo "But make sure you test the setup first: proxychains firefox dnsleaktest.com"
+}
+
 function start_postgresql() {
   service postgresql start
   msfdb init > /dev/null 2>&1 &
@@ -50,6 +57,7 @@ function main() {
   echo "$SPLASH"
   source /bashrc.sh
   set_dns_nameserver
+  tor_and_proxychains
   start_postgresql
   set_vnc_creds
   start_vnc_server

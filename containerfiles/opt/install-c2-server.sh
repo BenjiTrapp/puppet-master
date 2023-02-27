@@ -9,7 +9,8 @@ function get_latest_release() {
 function install_c2_server_over_apt() {
 	apt-get install -y 	powershell-empire \
 						starkiller \
-						merlin-server
+						merlin-server \
+						sliver
 }
 
 function install_baby_shark() {

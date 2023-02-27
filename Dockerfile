@@ -46,6 +46,7 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         crunch \ 
         fail2ban \
         hydra \
+        tor \
         ncrack \
         gobuster \
         dirb \
@@ -55,7 +56,6 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         hashcat \
         cherrytree \
         golang \
-        sliver \
         postgresql \
         sqlite3 \
         tightvncserver \
@@ -76,7 +76,6 @@ RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
         kali-desktop-${KALI_DESKTOP} \
         kali-tools-web \
         kali-tools-windows-resources \
-        kali-tools-top10 \
         kali-tools-top10 \
         kali-tools-passwords \
         kali-tools-post-exploitation

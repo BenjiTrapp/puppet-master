@@ -20,7 +20,7 @@ docker pull ghcr.io/benjitrapp/puppet-master:main
 
 #### Wanna build your own image?
 
-For a Kickstart use the Makefile: `make all` and watch the magic of the puppet master by browsing to [http://127.0.0.1:6080/](http://127.0.0.1:6080/)
+For a Kickstart use the Makefile: `make all` and watch the magic of the puppet master by browsing to [http://localhost:9020/vnc.html](http://localhost:9020/vnc.html)
 
 ## Not ready to get mesmerized yet?
 
@@ -29,11 +29,11 @@ Build the image: `docker build -t puppet-master .` or run `make build`
 
 Run the docker image and open port 6080:
 
-`docker run -it -d --rm --name puppet-master -p 6080:8080 puppet-master` or `make run`
+`docker run --rm -it -p 9020:8080 -p 9021:5900 --name puppet-master puppet-master` or `make run`
 
 ## VNC and play with the puppets
 
-First at all: Browse to [http://127.0.0.1:6080/](http://127.0.0.1:6080/)
+First at all: Browse to [http://localhost:9020/vnc.html](http://localhost:9020/vnc.html)
 
 Forward VNC service port 5900 to host by
 
@@ -43,17 +43,13 @@ Now, open the vnc viewer and connect to port 5900. If you would like to protect 
 
 For example:
 
-`docker run -it --rm -p 6080:80 -p 5900:5900 -e VNC_PASSWORD=mypassword puppet-master`
+`docker run --rm -it -p 9020:8080 -p 9021:5900 --name puppet-master puppet-master -e VNC_PASSWORD=mypassword puppet-master`
 
 A prompt will ask password either in the browser or vnc viewer.
 
 ## To get into bash of the running container
 
 `sudo docker exec -i -t puppet-master /bin/bash`
-
-P.S. If you are going to run container in cloud virtual machine, first run the bellow command to virtual machine in cloud to create ssh tunnel to your virtual machine
-
-`ssh -i .ssh/private_key -L 6080:localhost:6080 -L 5900:localhost:5900 user@IP`
 
 ## Content 
 
@@ -68,7 +64,6 @@ P.S. If you are going to run container in cloud virtual machine, first run the b
 * kali-tools-social-engineering
 
 **C2 Capabilities**:
-* Metasploit
 * Covenant
 * SilentTrinity
 * Empire
@@ -76,6 +71,34 @@ P.S. If you are going to run container in cloud virtual machine, first run the b
 * PoshC2
 * Merlin
 * BabyShark
+* Sliver
+
+**Protection Capabilities**:
+* fail2ban
+* tor
+* proxychains
+* nginx
+* supervisord
+* (will be soon added) > tripwire and auditd
+
+**Recon and Wordlist Capabilities**:
+* Cewl
+* GoBuster
+* Bloodhound
+* dirb
+* sslscan
+
+**AWS/Cloud Attack Capabilities**:
+* awscli
+* pacu
+* endgame
+
+**Misc Attack Capabilities**:
+* Metasploit
+* Powershell-Empire
+* Hydra
+* ncrack
+* kerberoast
 
 ## Online Resources
 
