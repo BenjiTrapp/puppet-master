@@ -55,7 +55,6 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         bloodhound \
         medusa \
         hashcat \
-        cherrytree \
         golang \
         postgresql \
         sqlite3 \
@@ -82,7 +81,7 @@ RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
         kali-tools-post-exploitation
 
  RUN pip3 install --break-system-package --no-cache-dir --upgrade pip  && \
-    pip3 install --break-system-package --no-cache-dir jupyterlab roadlib roadrecon roadtx
+    pip3 install --break-system-package --no-cache-dir roadlib roadrecon roadtx
 
 
 ADD containerfiles /
