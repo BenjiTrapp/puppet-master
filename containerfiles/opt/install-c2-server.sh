@@ -10,6 +10,8 @@ function install_c2_server_over_apt() {
 	apt-get install -y 	powershell-empire \
 						starkiller \
 						merlin-server \
+						covenant-kbx \
+						havoc \
 						sliver
 }
 

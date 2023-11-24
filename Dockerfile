@@ -25,6 +25,7 @@ RUN apt-get -y update \
     && apt-get clean \
     && apt-get install -y --no-install-recommends software-properties-common curl wget vim nano
 
+
 RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         openssh-server pwgen sudo vim-tiny \
 	supervisor \
@@ -36,10 +37,10 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         golang-go \
         git \
         jq \
-        powershell \
         whois \
         proxychains4 \
         libproxychains4 \
+        libyara-dev \
         sslscan \
         traceroute \
         cewl \
@@ -80,8 +81,9 @@ RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
         kali-tools-passwords \
         kali-tools-post-exploitation
 
-RUN pip3 install --break-system-package --no-cache-dir --upgrade pip  && \
-    pip3 install --break-system-package --no-cache-dir awscli boto3 pacu trufflehog endgame notebook
+ RUN pip3 install --break-system-package --no-cache-dir --upgrade pip  && \
+    pip3 install --break-system-package --no-cache-dir jupyterlab roadlib roadrecon roadtx
+
 
 ADD containerfiles /
 

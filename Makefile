@@ -1,6 +1,6 @@
 # vim:ft=make:
 
-.PHONY : all start github
+.PHONY : all start build github
 
 all: github
 
