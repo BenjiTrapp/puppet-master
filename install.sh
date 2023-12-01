@@ -12,7 +12,8 @@ function install_oh_my_bash() {
 }
 
 function install_merlin_server() {
-    local latest_version=$(get_latest_release Ne0nd0g/merlin)
+    # local latest_version=$(get_latest_release Ne0nd0g/merlin)
+    local latest_version=v1.5.1
     curl -kLO https://github.com/Ne0nd0g/merlin/releases/download/${latest_version}/merlinServer-Linux-x64.7z &&\
     7z x merlinServer-Linux-x64.7z -r merlinServer-Linux-x64 -pmerlin &&\
     install merlinServer-Linux-x64 /usr/local/bin/merlin-server &&\
@@ -26,6 +27,8 @@ function install_merlin_agent() {
     7z x merlinAgent-Linux-x64.7z -r merlinAgent-Linux-x64 -pmerlin &&\
     install merlinAgent-Linux-x64 /usr/local/bin/merlin-agent &&\
     rm -rf merlinAgent-Linux-x64*;
+
+    go get github.com/Ne0nd0g/merlin-agent
 }
 
 function install_sliver() {
