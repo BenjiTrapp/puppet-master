@@ -4,118 +4,181 @@
 <img width=400 src="/docs/puppet-master.png">
 </p>
 
-##### Disclamer:
-> I'm not responsible for any harm caused by this tool. The provided docker image is part of my curiosity and used for CTFs and education only. Use these powers wisely and stay on the light side!
+> **Disclaimer:** This tooling is provided for educational purposes, authorized penetration testing engagements, and CTF competitions only. I am not responsible for any misuse or damage caused. Use these powers wisely and stay on the right side of the law.
 
+---
 
-## Tighten the strings and have some fun with your puppets
+## What is Puppet Master?
 
-This Docker image is build on top of a minimal base install of the latest version of the Kali Linux Rolling Distribution and enriched with additional capabilities to transform it into a [C2 Server](https://www.paloaltonetworks.com/cyberpedia/command-and-control-explained) to aid during Pentesting engagements, CTFs or for other sakes.
+Puppet Master is a Dockerized C2 (Command & Control) lab environment. It comes in two flavors — a lightweight **slim** image built around a browser-accessible terminal, and a full-fat **Kali Linux** image with a noVNC desktop — giving you a ready-to-go offensive toolkit without touching your host system.
 
-#### Get a pre-build image
+```mermaid
+graph LR
+    PM([puppet-master])
+    PM --> S[slim]
+    PM --> F[fat]
+    S --> S1[Sliver]
+    S --> S2[Merlin]
+    S --> S3[PoshC2]
+    S --> SP[:7681 web terminal]
+    F --> F1[Sliver + Havoc]
+    F --> F2[Empire + Starkiller]
+    F --> F3[Merlin + PoshC2]
+    F --> F4[Kali metapackages]
+    F --> FP[:9020 noVNC / :5900 VNC]
+```
+
+---
+
+## Quick Start
+
+### Pull the pre-built slim image
 
 ```bash
 docker pull ghcr.io/benjitrapp/puppet-master:main
 ```
 
-#### Wanna build your own image?
+### Run slim (browser terminal, port 7681)
 
-For a Kickstart use the Makefile: `make all` and watch the magic of the puppet master by browsing to [http://localhost:9020/vnc.html](http://localhost:9020/vnc.html)
+```bash
+docker run --rm -it -p 7681:7681 --name puppet-master ghcr.io/benjitrapp/puppet-master:main
+```
 
-## Not ready to get mesmerized yet?
+Then open **http://localhost:7681** in your browser.
 
-Build the image: `docker build -t puppet-master .` or run `make build`
+### Run fat (noVNC desktop, Kali)
 
+```bash
+# Build first (not published to registry)
+make build_fat
 
-Run the docker image and open port 6080:
+docker run --rm -it -p 9020:8080 -p 9021:5900 --name kali-puppet-master kali-puppet-master
+```
 
-`docker run --rm -it -p 9020:8080 -p 9021:5900 --name puppet-master puppet-master` or `make run`
+Then open **http://localhost:9020/vnc.html** in your browser.
 
-## VNC and play with the puppets
+---
 
-First at all: Browse to [http://localhost:9020/vnc.html](http://localhost:9020/vnc.html)
+## Building Locally
 
-Forward VNC service port 5900 to host by
+```bash
+# Build slim image
+make build_slim
 
-`docker run -it --rm -p 6080:80 -p 5900:5900 puppet-master`
+# Build fat (Kali) image
+make build_fat
 
-Now, open the vnc viewer and connect to port 5900. If you would like to protect the VNC service by password, set environment variable VNC_PASSWORD.
+# Start slim
+make start_slim
 
-For example:
+# Start fat + open browser to noVNC
+make start_fat
+make browser
+```
 
-`docker run --rm -it -p 9020:8080 -p 9021:5900 --name puppet-master puppet-master -e VNC_PASSWORD=mypassword puppet-master`
+---
 
-A prompt will ask password either in the browser or vnc viewer.
+## Accessing the Running Container
 
-## To get into bash of the running container
+```bash
+# Drop into a bash shell inside a running container
+docker exec -it puppet-master /bin/bash
+```
 
-`sudo docker exec -i -t puppet-master /bin/bash`
+### VNC with a custom password (fat image)
 
-## Content 
+```bash
+docker run --rm -it \
+  -p 9020:8080 -p 9021:5900 \
+  -e VNCPWD=mypassword \
+  --name kali-puppet-master kali-puppet-master
+```
 
-**Kali metapackages [https://tools.kali.org/kali-metapackages]**:
-* kali-tools-top10
-* kali-desktop-gnome
-* kali-tools-fuzzing
-* kali-tools-passwords
-* kali-tools-post-exploitation
-* kali-tools-information-gathering
-* kali-tools-sniffing-spoofing
-* kali-tools-social-engineering
+---
 
-**C2 Capabilities**:
-* Covenant
-* SilentTrinity
-* Empire
-* StarKiller
-* PoshC2
-* Merlin
-* BabyShark
-* Sliver
+## Installed Tooling
 
-**Protection Capabilities**:
-* fail2ban
-* tor
-* proxychains
-* nginx
-* supervisord
-* (will be soon added) > tripwire and auditd
+### C2 Frameworks
 
-**Recon and Wordlist Capabilities**:
-* Cewl
-* GoBuster
-* Bloodhound
-* dirb
-* sslscan
+| Framework | Slim | Fat | Notes |
+|---|:---:|:---:|---|
+| [Sliver](https://github.com/BishopFox/sliver) | ✅ | ✅ | Binary + compile deps (Go, mingw-w64) |
+| [Merlin](https://github.com/Ne0nd0g/merlin) | ✅ | ✅ | Server + agent |
+| [PoshC2](https://github.com/nettitude/PoshC2) | ✅ | ✅ | PowerShell-based C2 |
+| [Havoc](https://github.com/HavocFramework/Havoc) | — | ✅ | Modern C2 with GUI teamserver |
+| [PowerShell-Empire](https://github.com/BC-SECURITY/Empire) | — | ✅ | via Kali apt |
+| [Starkiller](https://github.com/BC-SECURITY/Starkiller) | — | ✅ | Empire web UI |
 
-**AWS/Cloud Attack Capabilities**:
-* awscli
-* pacu
-* endgame
+### Kali Metapackages (fat only)
 
-**Misc Attack Capabilities**:
-* Metasploit
-* Powershell-Empire
-* Hydra
-* ncrack
-* kerberoast
+- `kali-linux-core`
+- `kali-desktop-xfce`
+- `kali-tools-web`
+- `kali-tools-windows-resources`
+- `kali-tools-top10`
+- `kali-tools-passwords`
+- `kali-tools-post-exploitation`
 
-## Online Resources
+### Recon & Enumeration (fat)
 
-* [The C2 Matrix](https://www.thec2matrix.com)
-* [C2 Agent Comparison (Aug 2019)](https://threatexpress.com/blogs/2019/c2-agent-comparison/)
+- `gobuster` / `dirb` — directory brute-forcing
+- `bloodhound` — AD attack path analysis
+- `sslscan` — TLS configuration auditing
+- `cewl` — custom wordlist generation from websites
+- `enum4linux` — SMB/NetBIOS enumeration
 
-## Articles
+### Password Attacks (fat)
 
-* [A comparisson of C2 frameworks](https://www.sans.org/cyber-security-summit/archives/file/summit-archive-1574188899.pdf)
-* [Flying a False Flag](https://i.blackhat.com/USA-19/Wednesday/\us-19-Landers-Flying-A-False-Flag-Advanced-C2-Trust-Conflicts-And-Domain-Takeover.pdf)
-* [MacShellSwift: PoC MacOS post exploitation tool in Swift](https://securityonline.info/macshellswift-poc-macos-post-exploitation-tool-in-swift/)
-* [Throwback Thursday – A Guide to Configuring Throwback](https://silentbreaksecurity.com/throwback-thursday-a-guide-to-configuring-throwback/)
-* [Voodoo CE Quickstart](https://medium.com/stage-2-security/voodoo-ce-quickstart-ba77eb37eda5)
-* [A first look at today’s Command and Control frameworks](https://www.foregenix.com/blog/a-first-look-at-todays-command-and-control-frameworks)
+- `hashcat` + `hydra` + `medusa` + `ncrack`
+- [SecLists](https://github.com/danielmiessler/SecLists)
+- [password_cracking_rules](https://github.com/NotSoSecure/password_cracking_rules)
+- [Hob0Rules](https://github.com/praetorian-inc/Hob0Rules) *(archived, static)*
 
-## Videos
+### Cloud / Azure Attacks (fat)
 
-* [RedViper](https://www.youtube.com/watch?v=rk4EMhq30-M)
-* [Command & Control tools course](https://www.youtube.com/watch?v=bUqu8fh7xUg), in Pt-Br language.
-* [How Hackers Use Discord To Control Victim PC’s](https://www.youtube.com/watch?v=_OXyb_Oxmjg)
+- [ROADrecon](https://github.com/dirkjanm/ROADtools) — Azure AD reconnaissance
+- [ROADtx](https://github.com/dirkjanm/ROADtools) — Azure token manipulation
+- JupyterLab — interactive notebooks for cloud data analysis
+
+### Infrastructure & Protection (fat)
+
+- `tor` + `proxychains4` — traffic anonymization
+- `nginx` — reverse proxy
+- `supervisord` — process supervision
+- `fail2ban` — brute-force protection
+- VNC (tightvncserver) + noVNC — browser-accessible desktop
+
+---
+
+## Environment Variables (fat image)
+
+| Variable | Default | Description |
+|---|---|---|
+| `VNCPWD` | `password` | VNC login password |
+| `VNCPORT` | `5900` | Raw VNC port |
+| `NOVNCPORT` | `8080` | noVNC web port |
+| `VNCDISPLAY` | `1920x1080` | Desktop resolution |
+| `VNCDEPTH` | `16` | Color depth |
+| `VNCEXPOSE` | `1` | `1` = bind all interfaces, `0` = localhost only |
+| `DNS_NAMESERVER` | `8.8.8.8` | DNS resolver used at startup |
+
+---
+
+## Resources
+
+### Reference
+
+- [The C2 Matrix](https://www.thec2matrix.com) — framework comparison table
+- [Kali Metapackages](https://tools.kali.org/kali-metapackages)
+
+### Reading
+
+- [A Comparison of C2 Frameworks — SANS](https://www.sans.org/cyber-security-summit/archives/file/summit-archive-1574188899.pdf)
+- [Flying a False Flag — Black Hat 2019](https://i.blackhat.com/USA-19/Wednesday/us-19-Landers-Flying-A-False-Flag-Advanced-C2-Trust-Conflicts-And-Domain-Takeover.pdf)
+- [A First Look at Today's C2 Frameworks — Foregenix](https://www.foregenix.com/blog/a-first-look-at-todays-command-and-control-frameworks)
+
+### Watching
+
+- [RedViper](https://www.youtube.com/watch?v=rk4EMhq30-M)
+- [Command & Control Tools Course (Pt-BR)](https://www.youtube.com/watch?v=bUqu8fh7xUg)
+- [How Hackers Use Discord To Control Victim PCs](https://www.youtube.com/watch?v=_OXyb_Oxmjg)

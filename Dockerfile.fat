@@ -5,38 +5,54 @@ LABEL org.opencontainers.image.author="benjitrapp.github.io"
 ARG KALI_METAPACKAGE=core
 ARG KALI_DESKTOP=xfce
 
-ENV VNCEXPOSE 1
-ENV VNCPORT 5900
-ENV VNCPWD password
-ENV VNCDISPLAY 1920x1080
-ENV VNCDEPTH 16
-ENV USER root
+ENV VNCEXPOSE=1
+ENV VNCPORT=5900
+ENV VNCPWD=password
+ENV VNCDISPLAY=1920x1080
+ENV VNCDEPTH=16
+ENV USER=root
 
-ENV NOVNCPORT 8080
-ENV DEBIAN_FRONTEND noninteractive
+ENV NOVNCPORT=8080
+ENV DEBIAN_FRONTEND=noninteractive
 
 ENV GOROOT=/usr/lib/go
 ENV GO111MODULE=on
-ENV GOPATH=$HOME/go
-ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+ENV GOPATH=/root/go
+ENV PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
 
 RUN apt-get -y update \
     && apt-get -y dist-upgrade \
+    && apt-get install -y --no-install-recommends \
+        software-properties-common \
+        curl \
+        wget \
+        vim \
+        nano \
     && apt-get clean \
-    && apt-get install -y --no-install-recommends software-properties-common curl wget vim nano
+    && rm -rf /var/lib/apt/lists/*
 
-
-RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
-        openssh-server pwgen sudo vim-tiny \
-	supervisor \
+RUN apt-get -y update && apt-get install -y --no-install-recommends --allow-unauthenticated \
+        openssh-server \
+        pwgen \
+        sudo \
+        vim-tiny \
+        supervisor \
         net-tools \
         binutils \
-	xfonts-base lwm xterm \
+        xfonts-base \
+        xterm \
+        lwm \
         nginx \
-        python3-pip python3-full python3-dev build-essential \
+        python3-pip \
+        python3-full \
+        python3-dev \
+        build-essential \
         golang-go \
         git \
         jq \
+        make \
+        zip \
+        unzip \
         whois \
         proxychains4 \
         libproxychains4 \
@@ -44,7 +60,7 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         sslscan \
         traceroute \
         cewl \
-        crunch \ 
+        crunch \
         fail2ban \
         hydra \
         tor \
@@ -56,15 +72,14 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
         medusa \
         hashcat \
         cherrytree \
-        golang \
+        gcc-mingw-w64 \
+        mingw-w64 \
         postgresql \
         sqlite3 \
         tightvncserver \
         dbus \
         dbus-x11 \
         novnc \
-        net-tools \
-        xfonts-base \
     && cd /usr/local/bin \
     && ln -s /usr/bin/python3 python \
     && apt-get -y autoclean \
@@ -72,18 +87,18 @@ RUN apt-get install -y --no-install-recommends --allow-unauthenticated \
     && rm -rf /var/lib/apt/lists/*
 
 # For installing other Kali metapackages check https://tools.kali.org/kali-metapackages
-RUN apt-get update && apt-cache search kali-linux && apt-get install -y  \
+RUN apt-get update && apt-get install -y \
         kali-linux-${KALI_METAPACKAGE} \
         kali-desktop-${KALI_DESKTOP} \
         kali-tools-web \
         kali-tools-windows-resources \
         kali-tools-top10 \
         kali-tools-passwords \
-        kali-tools-post-exploitation
+        kali-tools-post-exploitation \
+    && rm -rf /var/lib/apt/lists/*
 
- RUN pip3 install --break-system-package --no-cache-dir --upgrade pip  && \
-    pip3 install --break-system-package --no-cache-dir jupyterlab roadlib roadrecon roadtx
-
+RUN pip3 install --break-system-packages --no-cache-dir --upgrade pip && \
+    pip3 install --break-system-packages --no-cache-dir jupyterlab roadlib roadrecon roadtx
 
 ADD containerfiles /
 
