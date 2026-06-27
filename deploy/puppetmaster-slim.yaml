@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: puppet-master-pod
+  labels:
+    app: puppet-master
+spec:
+  containers:
+  - name: puppet-master-pod
+    image: ghcr.io/benjitrapp/puppet-master:nightly
+    ports:
+    - containerPort: 7681
+    securityContext:
+      readOnlyRootFilesystem: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: puppet-master-svc
+  labels:
+    app: puppet-master
+spec:
+  type: ClusterIP
+  ports:
+  - port: 7681
+    protocol: TCP
+  selector:
+    app: puppet-master
